@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Owner</title>
-    @vite(['resources/sass/app.scss'])
-</head>
-<body class="bg-light">
+@extends('layouts.app')
+@section('content')
     <div class="container mt-5">
         <h2 class="mb-4">Add new Owner</h2>
     </div>
@@ -18,9 +13,8 @@
             <input type="text" name="address" placeholder="Address" class="form-control mb-2" required>
             <div class="d-grid gap-2 mt-5">
                 <button class="btn btn-primary">Save</button>
-                <a href="{{ route('owners.index') }}" class="btn btn-primary mb-3">Go Back</a>
+                <a href="{{ route('owners.index') }}" class="btn btn-primary mb-3">Cancel</a>
             </div>
         </form>
     </div>
-</body>
-</html>
+@endsection
