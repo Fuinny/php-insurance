@@ -13,7 +13,7 @@
             @endforeach
         </select>
         <div class="d-grid gap-2 mt-5">
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">Save</button>
             <a href="{{ route('cars.index') }}" class="btn btn-primary mb-3">Cancel</a>
         </div>
     </form>

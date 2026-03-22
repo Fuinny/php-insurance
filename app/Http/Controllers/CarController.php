@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\RoleMiddleware;
 use App\Models\Car;
 use App\Models\Owner;
 use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(RoleMiddleware::class);
+    }
+
     /**
      * Display a listing of the resource.
      */
