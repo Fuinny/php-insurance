@@ -1,19 +1,34 @@
 @extends('layouts.app')
 @section('content')
     <div class="container mt-5">
-        <h2 class="mb-4">Add new Owner</h2>
+        <h2 class="mb-4">{{ __('Add new owner') }}</h2>
     </div>
     <div class="container mb-3">
         <form method="POST" action="{{ route('owners.store') }}">
             @csrf
-            <input type="text" name="name" placeholder="Name" class="form-control mb-2" required>
-            <input type="text" name="surname" placeholder="Surname" class="form-control mb-2" required>
-            <input type="text" name="phone" placeholder="Phone" class="form-control mb-2" required>
-            <input type="email" name="email" placeholder="Email" class="form-control mb-2" required>
-            <input type="text" name="address" placeholder="Address" class="form-control mb-2" required>
-            <div class="d-grid gap-2 mt-5">
-                <button class="btn btn-primary">Save</button>
-                <a href="{{ route('owners.index') }}" class="btn btn-primary mb-3">Cancel</a>
+            <div class="mb-3">
+                <label for="name" class="form-label">{{ __('Name') }}</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="surname" class="form-label">{{ __('Surname') }}</label>
+                <input type="text" id="surname" name="surname" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">{{ __('Phone') }}</label>
+                <input type="tel" id="phone" name="phone" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">{{ __('Email') }}</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">{{ __('Address') }}</label>
+                <input type="text" id="address" name="address" class="form-control" required>
+            </div>
+            <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                <a href="{{ route('owners.index') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
             </div>
         </form>
     </div>

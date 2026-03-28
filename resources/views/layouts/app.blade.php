@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Insurance System</title>
+    <title>{{ __('Insurance System') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -20,22 +20,21 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand"">
-                    Insurance System
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <a class="navbar-brand">{{ __('Insurance System') }}</a>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <a class="nav-link" href="{{ route('owners.index') }}">Owners</a>
-                        <a class="nav-link" href="{{ route('cars.index') }}">Cars</a>
+                        <a class="nav-link" href="{{ route('owners.index') }}">{{ __('Owners') }}</a>
+                        <a class="nav-link" href="{{ route('cars.index') }}">{{ __('Cars') }}</a>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+                        <!-- Language Selectors -->
+                        <a href="{{ route('lang.changeLanguage', "EN") }}" class="nav-link">EN</a>
+                        <a href="{{  route('lang.changeLanguage', "LT") }}" class="nav-link">LT</a>
+
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -76,6 +75,7 @@
         <main class="container mt-4">
             @yield('content')
         </main>
+
     </div>
 </body>
 </html>
