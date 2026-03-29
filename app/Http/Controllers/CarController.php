@@ -6,6 +6,7 @@ use App\Http\Middleware\RoleMiddleware;
 use App\Models\Car;
 use App\Models\Owner;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CarController extends Controller
 {
@@ -38,10 +39,26 @@ class CarController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'reg_number' => 'required|unique:cars,reg_number',
-            'brand' => 'required',
-            'model' => 'required',
-            'owner_id' => 'required|exists:owners,id',
+            'reg_number' => [
+                'required',
+                'regex:/^[A-Z]{3}[0-9]{3}$/',
+                'unique:cars,reg_number'
+            ],
+            'brand' => 'required|min:2|max:50',
+            'model' => 'required|min:1|max:50',
+            'owner_id' => 'required|exists:owners,id'
+        ],[
+            'reg_number.required' => __('Reg number is required'),
+            'reg_number.regex' => __('Reg number is not in correct format'),
+            'reg_number.unique' => __('Reg number is already registered'),
+            'brand.required' => __('Brand is required'),
+            'brand.min' => __('Brand must be at least 2 characters'),
+            'brand.max' => __('Brand must be less than 50 characters'),
+            'model.required' => __('Model is required'),
+            'model.min' => __('Model must be at least 1 characters'),
+            'model.max' => __('Model must be less than 50 characters'),
+            'owner_id.required' => __('Owner is required'),
+            'owner_id.exists' => __('Owner not found')
         ]);
 
         Car::create($validated);
@@ -73,10 +90,26 @@ class CarController extends Controller
     public function update(Request $request, Car $car)
     {
         $validated = $request->validate([
-            'reg_number' => 'required|unique:cars,reg_number,' . $car->id,
-            'brand' => 'required',
-            'model' => 'required',
-            'owner_id' => 'required|exists:owners,id',
+            'reg_number' => [
+                'required',
+                'regex:/^[A-Z]{3}[0-9]{3}$/',
+                Rule::unique('cars')->ignore($car->id)
+            ],
+            'brand' => 'required|min:2|max:50',
+            'model' => 'required|min:1|max:50',
+            'owner_id' => 'required|exists:owners,id'
+        ],[
+            'reg_number.required' => __('Reg number is required'),
+            'reg_number.regex' => __('Reg number is not in correct format'),
+            'reg_number.unique' => __('Reg number is already registered'),
+            'brand.required' => __('Brand is required'),
+            'brand.min' => __('Brand must be at least 2 characters'),
+            'brand.max' => __('Brand must be less than 50 characters'),
+            'model.required' => __('Model is required'),
+            'model.min' => __('Model must be at least 1 characters'),
+            'model.max' => __('Model must be less than 50 characters'),
+            'owner_id.required' => __('Owner is required'),
+            'owner_id.exists' => __('Owner not found')
         ]);
 
         $car->update($validated);
