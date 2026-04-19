@@ -14,6 +14,7 @@
         <table class="table table-bordered">
             <tr>
                 <th>ID</th>
+                <th>{{ __('Photos') }}</th>
                 <th>{{ __('Registration number') }}</th>
                 <th>{{ __('Brand') }}</th>
                 <th>{{ __('Model') }}</th>
@@ -27,6 +28,15 @@
             @forelse($cars as $car)
                 <tr>
                     <td>{{ $car->id }}</td>
+                    <td>
+                        <div class="d-flex flex-wrap gap-1" style="min-width: 120px;">
+                             @forelse($car->photos as $photo)
+                                <img src="{{ asset('storage/' . $photo->path) }}" width="80" height="80" class="rounded object-fit-cover">
+                            @empty
+                                <span>{{__('No Photos')}}</span>
+                            @endforelse
+                        </div>
+                    </td>
                     <td>{{ $car->reg_number }}</td>
                     <td>{{ $car->brand }}</td>
                     <td>{{ $car->model }}</td>

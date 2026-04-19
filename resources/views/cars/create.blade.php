@@ -33,6 +33,11 @@
                 </select>
                 <div class="invalid-feedback">@error('owner_id') {{ $message }} @enderror</div>
             </div>
+            <div class="mb-3">
+                <label for="photos" class="form-label">{{ __('Upload New Photos') }}</label>
+                <input type="file" id="photos" name="photos[]" class="form-control @error('photos.*') is-invalid @enderror" multiple>
+                <div class="invalid-feedback">@error('photos.*') {{ $message }} @enderror</div>
+            </div>
             <div class="d-grid gap-2 mt-4">
                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                 <a href="{{ route('cars.index') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>

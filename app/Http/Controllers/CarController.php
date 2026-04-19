@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\RoleMiddleware;
 use App\Models\Car;
 use App\Models\Owner;
+use App\Models\CarPhoto;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
 {
@@ -20,7 +22,7 @@ class CarController extends Controller
      */
     public function index()
     {
-        $cars = Car::with('owner')->get();
+        $cars = Car::with('owner', 'photos')->get();
         return view('cars.index', compact('cars'));
     }
 
@@ -46,7 +48,8 @@ class CarController extends Controller
             ],
             'brand' => 'required|min:2|max:50',
             'model' => 'required|min:1|max:50',
-            'owner_id' => 'required|exists:owners,id'
+            'owner_id' => 'required|exists:owners,id',
+            'photos.*' => 'nullable|mimes:jpg,jpeg,png|max:2048'
         ],[
             'reg_number.required' => __('Reg number is required'),
             'reg_number.regex' => __('Reg number is not in correct format'),
@@ -58,7 +61,9 @@ class CarController extends Controller
             'model.min' => __('Model must be at least 1 characters'),
             'model.max' => __('Model must be less than 50 characters'),
             'owner_id.required' => __('Owner is required'),
-            'owner_id.exists' => __('Owner not found')
+            'owner_id.exists' => __('Owner not found'),
+            'photos.*.mimes' => __('Only JPEG/JPG and PNG images are supported'),
+            'photos.*.max'   => __('Photos must be smaller than 2MB each')
         ]);
 
         Car::create($validated);
@@ -97,7 +102,8 @@ class CarController extends Controller
             ],
             'brand' => 'required|min:2|max:50',
             'model' => 'required|min:1|max:50',
-            'owner_id' => 'required|exists:owners,id'
+            'owner_id' => 'required|exists:owners,id',
+            'photos.*' => 'nullable|mimes:jpg,jpeg,png|max:2048'
         ],[
             'reg_number.required' => __('Reg number is required'),
             'reg_number.regex' => __('Reg number is not in correct format'),
@@ -109,10 +115,19 @@ class CarController extends Controller
             'model.min' => __('Model must be at least 1 characters'),
             'model.max' => __('Model must be less than 50 characters'),
             'owner_id.required' => __('Owner is required'),
-            'owner_id.exists' => __('Owner not found')
+            'owner_id.exists' => __('Owner not found'),
+            'photos.*.mimes' => __('Only JPEG/JPG and PNG images are supported'),
+            'photos.*.max'   => __('Photos must be smaller than 2MB each')
         ]);
 
         $car->update($validated);
+
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('cars', 'public');
+                $car->photos()->create(['path' => $path]);
+            }
+        }
 
         return redirect()->route('cars.index');
     }
@@ -124,5 +139,16 @@ class CarController extends Controller
     {
         $car->delete();
         return redirect()->route('cars.index');
+    }
+
+    public function destroyPhoto(CarPhoto $photo)
+    {
+        if ($photo->path) {
+            Storage::disk('public')->delete($photo->path);
+        }
+
+        $photo->delete();
+
+        return back();
     }
 }

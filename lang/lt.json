@@ -59,5 +59,14 @@
     "Model must be at least 1 characters": "Modelis turi būti bent 1 simbolio",
     "Model must be less than 50 characters": "Modelis negali viršyti 50 simbolių",
     "Owner is required": "Savininkas yra privalomas",
-    "Owner not found": "Savininkas nerastas"
+    "Owner not found": "Savininkas nerastas",
+    "Photos": "Nuotraukos",
+    "No Photos": "Nėra nuotraukų",
+    "Current Photos": "Dabartinės nuotraukos",
+    "Upload New Photos": "Įkelti naujas nuotraukas",
+    "Save": "Išsaugoti",
+    "Cancel": "Atšaukti",
+    "Only JPEG/JPG and PNG images are supported": "Palaikomi tik JPEG/JPG ir PNG nuotraukos",
+    "Photos must be smaller than 2MB each": "Kiekviena nuotrauka turi būti mažesnė nei 2 MB"
+
 }

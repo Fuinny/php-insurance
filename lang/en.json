@@ -59,5 +59,13 @@
     "Model must be at least 1 characters": "Model must be at least 1 characters",
     "Model must be less than 50 characters": "Model must be less than 50 characters",
     "Owner is required": "Owner is required",
-    "Owner not found": "Owner not found"
+    "Owner not found": "Owner not found",
+    "Photos": "Photos",
+    "No Photos": "No Photos",
+    "Current Photos": "Current Photos",
+    "Upload New Photos": "Upload New Photos",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "Only JPEG/JPG and PNG images are supported": "Only JPEG/JPG and PNG images are supported",
+    "Photos must be smaller than 2MB each": "Photos must be smaller than 2MB each"
 }

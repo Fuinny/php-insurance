@@ -26,6 +26,8 @@ Route::group(['middleware' => ['lang']], function () {
             Route::delete('/owners/{owner}', [OwnerController::class, 'destroy'])->name('owners.destroy');
 
             Route::resource('cars', CarController::class)->except(['index']);
+
+            Route::delete('/cars/photos/{photo}', [CarController::class, 'destroyPhoto'])->name('cars.photos.destroy');
         });
     });
 });
