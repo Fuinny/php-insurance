@@ -10,7 +10,15 @@ class OwnerController extends Controller
 {
     public function index()
     {
-        $owners = Owner::all();
+        if (auth()->user()->isAdmin() || auth()->user()->isReadonly())
+        {
+            $owners = Owner::all();
+        }
+        else
+        {
+            $owners = Owner::where('user_id', auth()->id())->get();
+        }
+
         return view('owners.index', compact('owners'));
     }
 
@@ -54,6 +62,8 @@ class OwnerController extends Controller
         $owner->email = $validated['email'];
         $owner->address = $validated['address'];
 
+        $owner->user_id = auth()->id();
+
         $owner->save();
 
         return redirect()->route('owners.index');
@@ -61,11 +71,15 @@ class OwnerController extends Controller
 
     public function edit(Owner $owner)
     {
+        $this->authorize('update', $owner);
+
         return view('owners.edit', compact('owner'));
     }
 
     public function update(Request $request, Owner $owner)
     {
+        $this->authorize('update', $owner);
+
         $validated = $request->validate([
             'name' => 'required|min:2|max:50',
             'surname' => 'required|min:2|max:50',
@@ -108,7 +122,10 @@ class OwnerController extends Controller
 
     public function destroy(Owner $owner)
     {
+        $this->authorize('delete', $owner);
+
         $owner->delete();
+        
         return redirect()->route('owners.index');
     }
 }

@@ -14,7 +14,7 @@ class CarController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(RoleMiddleware::class);
+        // $this->middleware(RoleMiddleware::class);
     }
 
     /**
@@ -22,7 +22,15 @@ class CarController extends Controller
      */
     public function index()
     {
-        $cars = Car::with('owner', 'photos')->get();
+        if (auth()->user()->isAdmin() || auth()->user()->isReadonly())
+        {
+            $cars = Car::with('owner', 'photos')->get();
+        }
+        else
+        {
+            $cars = auth()->user()->cars()->with('owner', 'photos')->get();
+        }
+
         return view('cars.index', compact('cars'));
     }
 
@@ -31,7 +39,15 @@ class CarController extends Controller
      */
     public function create()
     {
-        $owners = Owner::all();
+        if (auth()->user()->isAdmin() || auth()->user()->isReadonly())
+        {
+            $owners = Owner::all();
+        }
+        else
+        {
+            $owners = Owner::where('user_id', auth()->id())->get();
+        }
+
         return view('cars.create', compact('owners'));
     }
 
@@ -66,6 +82,14 @@ class CarController extends Controller
             'photos.*.max'   => __('Photos must be smaller than 2MB each')
         ]);
 
+        if (!auth()->user()->isAdmin()) {
+            $owner = Owner::find($validated['owner_id']);
+
+            if ($owner->user_id !== auth()->id()) {
+                abort(403, 'You cannot assign a car to an owner you do not own.');
+            }
+        }
+
         Car::create($validated);
 
         return redirect()->route('cars.index');
@@ -85,7 +109,17 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
-        $owners = Owner::all();
+        $this->authorize('update', $car);
+
+        if (auth()->user()->isAdmin() || auth()->user()->isReadonly())
+        {
+            $owners = Owner::all();
+        }
+        else
+        {
+            $owners = Owner::where('user_id', auth()->id())->get();
+        }
+
         return view('cars.edit', compact('car', 'owners'));
     }
 
@@ -94,6 +128,8 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
+        $this->authorize('update', $car);
+
         $validated = $request->validate([
             'reg_number' => [
                 'required',
@@ -120,6 +156,14 @@ class CarController extends Controller
             'photos.*.max'   => __('Photos must be smaller than 2MB each')
         ]);
 
+        if (!auth()->user()->isAdmin()) {
+            $owner = Owner::find($validated['owner_id']);
+
+            if ($owner->user_id !== auth()->id()) {
+                abort(403, 'You cannot assign a car to an owner you do not own.');
+            }
+        }
+
         $car->update($validated);
 
         if ($request->hasFile('photos')) {
@@ -137,6 +181,8 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
+        $this->authorize('delete', $car);
+
         $car->delete();
         return redirect()->route('cars.index');
     }
